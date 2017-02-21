@@ -26,8 +26,7 @@ class WooCommerce_Role_Based_Price_Product_Pricing {
 	public function get_product_price($base_price,$product,$price_meta_key = 'regular_price',$current_user = ''){
         if(!apply_filters('role_based_price_status',true)){
             return $base_price;
-        }
-        
+        } 
 		$wc_rbp_price = false;
 		$product_id = '';
 		$opposite_key = 'selling_price';
@@ -85,7 +84,15 @@ class WooCommerce_Role_Based_Price_Product_Pricing {
                                      );
         
 		$return = wc_format_decimal($wc_rbp_price);
-        $return = apply_filters('wcml_raw_price_amount', $return);
+        
+        $wpml_integration_status = wc_rbp_option('enable_wpml_integration');
+        
+        if($wpml_integration_status == 'on'){
+            if(class_exists('woocommerce_wpml')){
+                $return = apply_filters('wcml_raw_price_amount', $return);
+            }
+        }
+        
 		return $return;
 	}
 	
@@ -113,7 +120,7 @@ class WooCommerce_Role_Based_Price_Product_Pricing {
 	}
 	
 	private function is_simple_product($product){
-		$class = $this->get_product_class($product); 
+		$class = $this->get_product_class($product);  
         $classes = apply_filters("wc_rbp_simple_product_class",array('WC_Product_Simple','WC_Product_Yith_Bundle'));
 		if(in_array($class,$classes)){return true;}
 		return false;
@@ -147,7 +154,7 @@ class WooCommerce_Role_Based_Price_Product_Pricing {
 	 */
 	public function get_selling_price($price, $product){
 		$price = $this->get_product_price($price,$product,'selling_price');
-        $price = apply_filters("wc_rbp_product_selling_price",$price,$product,$this);
+        $price = apply_filters("wc_rbp_product_selling_price",$price,$product,$this); 
 		return $price;
 	}
 	

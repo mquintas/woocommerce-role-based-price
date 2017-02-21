@@ -80,6 +80,16 @@ class WooCommerce_Role_Based_Price_Admin_Settings_Options {
             ); 
         }
         
+        if(class_exists('woocommerce_wpml')){
+            $fields['general']['general'][] = array(
+                'id' => WC_RBP_DB.'enable_wpml_integration',
+                'type'    => 'checkbox',
+                'label' => __('WPML Integration',WC_RBP_TXT),
+                'desc' => __('check if you have installed wpml and the price are showing wrong. ',WC_RBP_TXT),
+                'attr'    => array( 'class' => 'wc_rbp_checkbox', ),
+            );
+        }
+        
         
 		 
 		$addonSettings = array('addon_sample' => array());
